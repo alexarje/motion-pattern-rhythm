@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motion Pattern Rhythm</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header id="header">
+      <div id="title-block">
+        <h1>MOTION PATTERN RHYTHM</h1>
+        <p id="subtitle">Body-controlled multi-layer rhythm instrument</p>
+      </div>
+      <div id="transport">
+        <button id="btn-start-audio" class="btn btn-primary">▶ START</button>
+        <button id="btn-stop" class="btn btn-danger" disabled>■ STOP</button>
+        <div id="bpm-display">
+          <span id="bpm-value">120</span>
+          <span class="unit">BPM</span>
+        </div>
+        <div id="beat-indicator"></div>
+      </div>
+      <div id="camera-controls">
+        <button id="btn-camera" class="btn btn-secondary">📷 CAMERA</button>
+        <span id="camera-status" class="status-off">OFF</span>
+      </div>
+    </header>
+
+    <!-- Main content area -->
+    <main id="main">
+      <!-- Left: Camera + pose overlay -->
+      <section id="camera-panel">
+        <div id="camera-container">
+          <video id="video" playsinline></video>
+          <canvas id="pose-canvas"></canvas>
+          <div id="no-camera-msg">
+            <div class="icon">🎭</div>
+            <p>Enable camera for<br>motion control</p>
+          </div>
+        </div>
+        <div id="motion-params">
+          <div class="param-row">
+            <div class="param" id="param-tempo">
+              <span class="param-label">TEMPO</span>
+              <div class="param-bar"><div class="param-fill" id="fill-tempo"></div></div>
+            </div>
+            <div class="param" id="param-volume">
+              <span class="param-label">VOLUME</span>
+              <div class="param-bar"><div class="param-fill" id="fill-volume"></div></div>
+            </div>
+          </div>
+          <div class="param-row">
+            <div class="param" id="param-complexity">
+              <span class="param-label">DENSITY</span>
+              <div class="param-bar"><div class="param-fill" id="fill-complexity"></div></div>
+            </div>
+            <div class="param" id="param-reverb">
+              <span class="param-label">REVERB</span>
+              <div class="param-bar"><div class="param-fill" id="fill-reverb"></div></div>
+            </div>
+          </div>
+          <div class="param-row">
+            <div class="param" id="param-pitch">
+              <span class="param-label">PITCH</span>
+              <div class="param-bar"><div class="param-fill" id="fill-pitch"></div></div>
+            </div>
+            <div class="param" id="param-bass">
+              <span class="param-label">BASS</span>
+              <div class="param-bar"><div class="param-fill" id="fill-bass"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Pattern display -->
+      <section id="pattern-panel">
+        <canvas id="pattern-canvas"></canvas>
+        <div id="layer-controls">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer: motion guide -->
+    <footer id="footer">
+      <div class="gesture-guide">
+        <span class="gesture"><span class="gesture-icon">🤚R</span> tempo</span>
+        <span class="gesture"><span class="gesture-icon">🤚L</span> volume</span>
+        <span class="gesture"><span class="gesture-icon">💪R</span> density</span>
+        <span class="gesture"><span class="gesture-icon">💪L</span> reverb</span>
+        <span class="gesture"><span class="gesture-icon">🗣️</span> pitch</span>
+        <span class="gesture"><span class="gesture-icon">🦵</span> bass</span>
+        <span class="gesture"><span class="gesture-icon">🙌</span> fill</span>
+        <span class="gesture"><span class="gesture-icon">↔️</span> layer mix</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MediaPipe Pose -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+  <!-- App modules -->
+  <script src="js/audio-engine.js"></script>
+  <script src="js/rhythm-engine.js"></script>
+  <script src="js/pattern-visual.js"></script>
+  <script src="js/motion-tracker.js"></script>
+  <script src="js/motion-mapper.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

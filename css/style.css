@@ -1,0 +1,309 @@
+/* ─── Reset & Base ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0f;
+  --bg2:       #12121a;
+  --bg3:       #1a1a26;
+  --border:    #2a2a3a;
+  --text:      #e0e0f0;
+  --text-dim:  #6060a0;
+  --primary:   #00e5ff;
+  --danger:    #ff3366;
+  --secondary: #7c4dff;
+  --beat:      #ffea00;
+
+  /* Layer colours */
+  --l0: #ff3366;   /* kick  */
+  --l1: #ff7043;   /* snare */
+  --l2: #ffca28;   /* hihat-closed */
+  --l3: #66bb6a;   /* hihat-open */
+  --l4: #00e5ff;   /* bass  */
+  --l5: #40c4ff;   /* lead  */
+  --l6: #ce93d8;   /* counter */
+  --l7: #f48fb1;   /* pad   */
+}
+
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+/* ─── App Shell ──────────────────────────────────────────────────────── */
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────── */
+#header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 1.2rem;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+#title-block h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--primary);
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+#subtitle { font-size: 0.68rem; color: var(--text-dim); margin-top: 1px; }
+
+#transport {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+#bpm-display {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  padding: 2px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+}
+#bpm-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--beat);
+  text-shadow: 0 0 8px var(--beat);
+  min-width: 3ch;
+  text-align: right;
+}
+.unit { font-size: 0.65rem; color: var(--text-dim); }
+
+#beat-indicator {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.05s, box-shadow 0.05s;
+}
+#beat-indicator.flash {
+  background: var(--beat);
+  box-shadow: 0 0 14px var(--beat);
+}
+
+#camera-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────── */
+.btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s;
+}
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-primary  { background: var(--primary); color: #000; }
+.btn-primary:not(:disabled):hover { box-shadow: 0 0 14px var(--primary); }
+.btn-danger   { background: var(--danger); color: #fff; }
+.btn-danger:not(:disabled):hover  { box-shadow: 0 0 14px var(--danger); }
+.btn-secondary{ background: var(--secondary); color: #fff; }
+.btn-secondary:not(:disabled):hover { box-shadow: 0 0 14px var(--secondary); }
+
+.status-off { color: var(--danger); font-size: 0.7rem; }
+.status-on  { color: #4caf50; font-size: 0.7rem; }
+
+/* ─── Main layout ────────────────────────────────────────────────────── */
+#main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ─── Camera Panel ───────────────────────────────────────────────────── */
+#camera-panel {
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+#camera-container {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #000;
+}
+
+#video {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);   /* mirror */
+  opacity: 0.6;
+}
+
+#pose-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+#no-camera-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--text-dim);
+  text-align: center;
+  font-size: 0.8rem;
+}
+#no-camera-msg .icon { font-size: 2.5rem; }
+#no-camera-msg.hidden { display: none; }
+
+#motion-params {
+  padding: 0.6rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg3);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.param-row { display: flex; gap: 6px; }
+
+.param {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.param-label { font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.12em; }
+
+.param-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.param-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  width: 50%;
+  transition: width 0.08s ease;
+  box-shadow: 0 0 6px var(--primary);
+}
+#fill-tempo     { background: var(--l0); box-shadow: 0 0 6px var(--l0); }
+#fill-volume    { background: var(--l4); box-shadow: 0 0 6px var(--l4); }
+#fill-complexity{ background: var(--l1); box-shadow: 0 0 6px var(--l1); }
+#fill-reverb    { background: var(--secondary); box-shadow: 0 0 6px var(--secondary); }
+#fill-pitch     { background: var(--l6); box-shadow: 0 0 6px var(--l6); }
+#fill-bass      { background: var(--l4); box-shadow: 0 0 6px var(--l4); }
+
+/* ─── Pattern Panel ──────────────────────────────────────────────────── */
+#pattern-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+#pattern-canvas {
+  flex: 1;
+  display: block;
+  width: 100%;
+}
+
+#layer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+}
+
+.layer-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--bg3);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  transition: all 0.15s;
+  user-select: none;
+}
+.layer-btn .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.layer-btn.active {
+  color: var(--text);
+  border-color: currentColor;
+  background: var(--bg);
+}
+.layer-btn.active .dot { box-shadow: 0 0 6px currentColor; }
+.layer-btn:hover { opacity: 0.85; }
+
+/* ─── Footer ─────────────────────────────────────────────────────────── */
+#footer {
+  padding: 4px 1rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.gesture-guide {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+.gesture {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+.gesture-icon { font-size: 0.85rem; }
+
+/* ─── Glow pulse animation ───────────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+.pulsing { animation: pulse-glow 0.5s ease; }
